@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country-Details</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        .div {
+            height: 350px;
+            width: 25%;
+            background-color: whitesmoke;
+            background-image: linear-gradient(45deg,orange,skyblue,lightgreen,lightblue,violet);
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            padding-left: 10px;
+            position: absolute;
+            top: 30%;
+            left: 40%;
+            /* box-shadow: 10px 10px 10px white inset; */
+            border-radius: 30px;
+        }
+       
+        .ckeys{
+            /* font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
+            font-family:cursive;
+            font-size: 20px;
+            font-weight: 900;
+            color: brown;
+            text-align:left;
+        }
+        .cvalues{
+            font-family:'Segoe UI';
+            font-size: 16px;
+            font-weight: normal;
+            text-align:left;
+            color: green;
+
+        }
+        #h{
+            position: sticky;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            color: rgb(27, 27, 247);
+            padding-left: 40px;
+           
+        }
+        #flag-image{
+            height: 100px;
+            width: 200px;
+        }
+        #error{
+            color: red;
+            font-size: 20px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-weight: 900;
+            
+        }
+        marquee{
+            color: rgb(208, 255, 0);
+            font-style: italic;
+            position: absolute;
+            top: 600px;
+        }
+    </style>
+</head>
+
+<body align="center" bgcolor="darkyellow">
+    <form action="" id="form-name">
+        <label for=""><big><b><i>Enter Name of country : </i></b></big></label><input type="text" id="name" placeholder="eg.India,Nepal,Austria">
+        <button type="submit"><i class="fas fa-search"></i>
+        </button>
+    </form>
+    <div class="div">
+        
+        <table id="tab">
+            <tr>
+                <td colspan="2">
+                   <h1 id="h">Country Details</h1> 
+                </td>
+            </tr>
+           
+            <tr>
+                <td class="ckeys">Country Name</td>
+                <td id="cname" class="cvalues"></td>
+            </tr>
+            <tr>
+                <td class="ckeys">Calling code</td>
+                <td id="ccode" class="cvalues"></td>
+            </tr>
+            <tr>
+                <td class="ckeys">Capital</td>
+                <td id="ccap" class="cvalues"></td>
+            </tr>
+            <tr>
+                <td class="ckeys">Region</td>
+                <td id="reg" class="cvalues"></td>
+            </tr>
+            <tr>
+                <td class="ckeys">Population</td>
+                <td id="pop" class="cvalues"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <img src="" alt="country-flag" id="flag-image">
+                  
+
+                </td>
+               
+            </tr>
+        </table>
+        
+        <p id="error"></p>
+
+    </div>
+
+    <script>
+        document.getElementById('error').style.display='none'
+        document.getElementById('form-name').addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent the default form submission behavior
+            let nameInput = document.getElementById('name');
+            let enteredName = nameInput.value;
+            let url = `https://restcountries.com//v2/name/${enteredName}`
+            let fetched_url = fetch(url)
+            fetched_url.then((response) => {
+                if (!response.ok) {
+                    throw new Error("Something went wrong, Page is not responding")
+                } else {
+                    return response.json()
+                }
+            }).then((data) => {
+                //console.log(data)
+                for (i in data) {
+                    document.getElementById('cname').innerHTML = `${data[i].name}`
+                    document.getElementById('ccode').innerHTML = `${data[i].callingCodes}`
+                    document.getElementById('ccap').innerHTML=`${data[i].capital}`
+                    document.getElementById('reg').innerHTML= `${data[i].region}`
+                    document.getElementById('pop').innerHTML= `${data[i].population}`
+                    let flag_url = `${data[i].flag}`
+                    const f=document.getElementById("flag-image")
+                    f.src=flag_url
+                    
+                    //`Country Name: ${data[i].name}\nCalling code : ${data[i].callingCodes}\n Capital : ${data[i].capital}\n Region: ${data[i].region}\n Population : ${data[i].population}\n`
+                }
+            }).catch((err) => {
+                document.getElementById('tab').style.display='none'
+                document.getElementById('error').style.display='inline'
+                document.getElementById('error').innerHTML =`There is problem with fetching Api ${err}`
+                documnet.getElementById('error').style.color='red'
+            })
+
+        });
+
+
+    </script>
+    <marquee behavior="" direction="" >Thank you for visiting &hearts; <br>developed by abhishekdk</marquee>
+
+</body>
+
+</html>
